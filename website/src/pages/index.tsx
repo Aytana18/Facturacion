@@ -17,11 +17,18 @@ function HomepageHeader() {
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="/docs/category/tutorial---basics">
-            El aprendizaje es el superpoder que te permite transformar tu mundo⏱️
-          </Link>
+        <span>
+        El aprendizaje es el superpoder que te permite transformar tu mundo ⏱️
+        <a
+         className="button button--secondary button--lg"
+         href="https://www.youtube.com/watch?v=_An9EsKPhp0&t=1s"
+         target="_blank"
+        rel="noopener noreferrer"
+        >
+        Si
+       </a>
+       </span>
+
         </div>
       </div>
     </header>
