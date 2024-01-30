@@ -2,42 +2,114 @@
 sidebar_position: 1
 ---
 
-# Create a Page
+# Guia instalacion Docker+Gitlab+SSL+SSH
 
-Add **Markdown or React** files to `src/pages` to create a **standalone page**:
+Docker | GitLab | Opción SSL | Opción SSH
 
-- `src/pages/index.js` → `localhost:3000/`
-- `src/pages/foo.md` → `localhost:3000/foo`
-- `src/pages/foo/bar.js` → `localhost:3000/foo/bar`
+### Facturador PRO 4
 
-## Create your first React Page
+#### Descripción
+ Hemos elaborado un script para uso en instancias Linux con Ubuntu 18 o superior, este es un archivo que actualiza el sistema, instala las herramientas, sus dependencias y realiza todas las configuraciones previas, dejando el aplicativo listo para probar en menos de 20 minutos (siempre y cuando el dominio ya esté configurado hacia la instancia), su ejecución es muy sencilla.
 
-Create a file at `src/pages/my-react-page.js`:
+## Requisitos previos
+ 1.  Tener acceso a su servidor, vps, máquina virtual o local via SSH, en las instalaciones que realizamos para AWS o Google Cloud, hacemos entrega del usuario, la IP del servidor y la clave ssh que puede ser un archivo .ppk o .pem, recuerde almacenarlas en su equipo local.
 
-```jsx title="src/pages/my-react-page.js"
-import React from 'react';
-import Layout from '@theme/Layout';
+ 2. Tener instalado una versión de ssh en su máquina para conectarse de manera remota, puede utilizar putty, filezilla o una consola terminal. para mayor información sobre el acceso SSH visite los siguientes manuales:
 
-export default function MyReactPage() {
-  return (
-    <Layout>
-      <h1>My React page</h1>
-      <p>This is a React page</p>
-    </Layout>
-  );
-}
-```
+  ```bash
+  https://docs.google.com/document/d/1PmQejvNd_dkXVm8DPUYlQTag0wvES46tMpxX3MPhkNY/edit#heading=h.nezjsyganf1w
+  ```
+  ```bash 
+  https://docs.google.com/document/d/1PmQejvNd_dkXVm8DPUYlQTag0wvES46tMpxX3MPhkNY/edit#heading=h.nezjsyganf1w
+  ```
 
-A new page is now available at [http://localhost:3000/my-react-page](http://localhost:3000/my-react-page).
+ 3. Si es posible configurar su dominio apuntando a su instancia para que al finalizar la instalación se encuentre disponible el aplicativo. Edite los récords A y CNAME donde A debe contener su IP y CNAME el valor * (asterisco) para que se tomen los subdominios registrados por la herramienta.
 
-## Create your first Markdown Page
+ ![Alt text](image.png)
 
-Create a file at `src/pages/my-markdown-page.md`:
+ 4.  En caso de contar con servicios instalados en su instancia como mysql, apache o nginx, debe detenerlos, ya que estos ocupan los puertos que pasarán a usar el aplicativo con los contenedores de Docker.
 
-```mdx title="src/pages/my-markdown-page.md"
-# My Markdown page
 
-This is a Markdown page
-```
+ ## Pasos
+ 1. Acceder a su instancia vía SSH.
+ 2. Loguearse como super usuario
+    ```bash 
+     sudo su 
+     ```
 
-A new page is now available at [http://localhost:3000/my-markdown-page](http://localhost:3000/my-markdown-page).
+ 3. Clonar el snippet de gitlab que contiene el script
+    ```bash 
+    git clone https://gitlab.com/snippets/2079063.git script
+    ```
+  4. Ingrese a la carpeta clonada
+     ```bash 
+     cd script
+     ``` 
+  5.  Dar permisos de ejecución al script
+      ```bash 
+      chmod +x install.sh
+       ```   
+      
+    6.   El comando a utilizar para iniciar el despliegue requiere de un parámetro principalmente:
+
+      ```bash 
+        install.sh [dominio]
+       ```
+
+  #### por ejemplo:
+   ```bash 
+    ./install.sh facturador.pro
+    ``` 
+
+    7. Una vez ejecutado el comando iniciará el proceso de actualización del sistema, en el proceso se le solicitará:
+  
+         a.El usuario y contraseña de GitLab, para que se pueda descargar el proyecto en su instancia
+
+          b.Si desea instalar SSL gratuito, tenga en cuenta que este debe ser actualizado cada 90 días, el mensaje será el siguiente:
+
+        i **TIP**
+        Instalar con SSL? (debe tener acceso al panel de su dominio para editar/agregar records TXT). si[s] no[n]
+
+           i. Deberá contestar con “s” o “n” para continuar.
+
+           ii. Si selecciona SÍ, deberá contestar las siguientes preguntas con “y”, son 2 en total, seguidamente se le ofrecerá un código que debe añadir en un récord tipo TXT en su dominio quedando como _acme-challenge.example.com o simplemente _acme-challenge dependerá de su proveedor.
+
+        
+       ![Alt text](image-2.png)
+
+          iii.  Para continuar presione enter, luego deberá repetir las acciones para añadir un segundo código y habrá finalizado la configuración, si el proceso es exitoso la ejecución del script continuará.
+           
+          c. Si desea obtener y gestionar actualizaciones automáticas, deberá disponer de su sesión de gitlab al momento
+
+    ```bash 
+    **TIP**
+       Configurar clave SSH para actualización automática? (requiere acceso a https://gitlab.com/profile/keys). si[s] no[n]
+     ``` 
+
+            i. Deberá contestar con “s” o “n” para continuar
+
+            ii. De seleccionar SÍ, al final del despliegue se le dará un extracto de texto que debe añadir a su configuración de gitlab
+
+     ![Alt text](image-3.png)
+
+8. Finalizado el script y dependiendo de sus selecciones anteriores, se le entregará varios datos que debe guardar, como;
+
+   a. Usuario administrador
+
+   b. Contraseña para usuario administrador
+
+   c. URL del proyecto
+
+   d. Ubicación del proyecto dentro del servidor
+
+   e. Clave SSH para añadir a gitlab (obligatorio para quienes seleccionan la instalación de SSH)
+
+
+## Enlaces de interés
+
+ ```bash 
+   https://gitlab.com/b.mendoza/facturadorpro3/-/snippets/1955372
+  
+   https://gitlab.com/b.mendoza/facturadorpro3/-/wikis/Script-Update-Docker
+
+  ``` 

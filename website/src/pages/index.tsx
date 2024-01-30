@@ -19,8 +19,8 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/intro">
-            Docusaurus Tutorial - 5min ⏱️
+            to="/docs/category/tutorial---basics">
+            El aprendizaje es el superpoder que te permite transformar tu mundo⏱️
           </Link>
         </div>
       </div>
